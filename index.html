@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menitip Rindu...</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ffffff;
+            --secondary-color: #dddddd;
+            --background-color: #0f0c29;
+            --accent-color: #6a11cb;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html {
+            height: 100%;
+            width: 100%;
+            background: var(--background-color);
+            background: linear-gradient(to top, #24243e, #302b63, #0f0c29);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-color);
+            overflow: hidden;
+            text-align: center;
+        }
+        #particles-js { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; }
+        .container { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; height: 100%; flex-direction: column; padding: 20px; }
+        #welcome-screen { opacity: 1; transition: opacity 1.5s ease-in-out; }
+        #welcome-screen h1 { font-size: 2.5rem; margin-bottom: 20px; font-family: 'Playfair Display', serif; text-shadow: 0 0 15px rgba(255, 255, 255, 0.5); }
+        #name-input { background: rgba(255, 255, 255, 0.1); border: 1px solid var(--accent-color); color: var(--primary-color); padding: 15px 25px; border-radius: 50px; font-size: 1.2rem; text-align: center; width: 80%; max-width: 400px; margin-bottom: 25px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        #name-input:focus { outline: none; transform: scale(1.05); box-shadow: 0 0 25px rgba(106, 17, 203, 0.7); }
+        #start-button { background: var(--accent-color); color: var(--primary-color); border: none; padding: 15px 40px; font-size: 1.2rem; font-weight: bold; border-radius: 50px; cursor: pointer; transition: transform 0.3s ease, background 0.3s ease; }
+        #start-button:hover { background: #8e44ad; transform: scale(1.1); }
+        #main-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; transition: opacity 2s ease-in-out 1s; }
+        .content-wrapper { animation: float 8s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0); } }
+        #greeting { font-size: 1.5rem; font-weight: 300; margin-bottom: 20px; color: var(--secondary-color); }
+        
+        #main-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 3.2rem; /* Ukuran sedikit disesuaikan untuk kalimat panjang */
+            font-weight: 700; 
+            font-style: italic;
+            min-height: 150px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.7s ease-in-out; 
+        }
+        
+        .bottom-bar { position: absolute; bottom: 20px; left: 0; width: 100%; z-index: 5; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        #realtime-clock { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; }
+        .time-box { padding: 5px 15px; border-radius: 8px; background: rgba(0, 0, 0, 0.2); }
+        .time-box span { font-size: 1.5rem; font-weight: bold; }
+        .time-box p { font-size: 0.7rem; text-transform: uppercase; color: var(--secondary-color); letter-spacing: 1px; }
+        footer { font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); }
+        @media (max-width: 768px) { #main-title { font-size: 2.8rem; } .time-box span { font-size: 1.2rem; } }
+        @media (max-width: 480px) { #main-title { font-size: 2.2rem; min-height: 120px; } #realtime-clock { gap: 8px; } .time-box span { font-size: 1rem; } .time-box p { font-size: 0.6rem; } }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <div id="welcome-screen" class="container">
+        <h1>Isi nama nya iya ♡ </h1>
+        <input type="text" id="name-input" placeholder="Tulis namanya di sini...">
+        <button id="start-button">Klik Donggg</button>
+    </div>
+
+    <div id="main-content" class="container">
+        <div class="content-wrapper">
+            <h2 id="greeting">Untukmu, ...</h2>
+            <h1 id="main-title"></h1>
+        </div>
+        
+        <div class="bottom-bar">
+            <div id="realtime-clock">
+                <div class="time-box"><span id="hari"></span><p>Hari</p></div>
+                <div class="time-box"><span id="tanggal"></span><p>Tanggal</p></div>
+                <div class="time-box"><span id="jam"></span><p>Waktu</p></div>
+            </div>
+            <footer>&copy;  Made by: Ridho Sandhika  .</footer>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // --- KUMPULAN KATA-KATA RINDU ISLAMI ---
+        const kataRinduIslami = [
+            // Bertema Doa dan Harapan
+            "Tak banyak yang bisa kulakukan selain menyebut namamu dalam setiap doaku, berharap Allah menjagamu di sana.",
+            "Jikapun raga tak bisa bertemu, semoga doa-doa kita saling berpelukan di langit-Nya.",
+            "Rindu ini kuubah menjadi untaian doa, semoga sampai kepadamu lewat penjagaan-Nya yang tak pernah lelah.",
+            "Untukmu yang jauh, semoga setiap langkahmu selalu berada dalam naungan rahmat Allah.",
+            "Di keheningan sepertiga malam, aku bercerita kepada Rabb-ku tentang sebuah nama yang kurindukan.",
+            // Bertema Sabar dan Penantian
+            "Aku belajar sabar dari rinduku padamu, karena janji Allah itu pasti untuk mereka yang hatinya sabar.",
+            "Setiap detik penantian ini adalah bukti, bahwa rasa ini kujaga dalam koridor kesabaran yang diridai-Nya.",
+            "Menantimu dalam diam adalah caraku menghormati takdir, sembari berbisik pada hati untuk terus bersabar.",
+            "Rindu ini berat, namun kesabaran dalam penantian ini semoga menjadi ladang pahala.",
+            // Bertema Takdir dan Ketetapan
+            "Jika namamu yang tertulis untukku di Lauhul Mahfuz, sejauh apapun jarak, Allah punya cara untuk menyatukan.",
+            "Kita mungkin berjarak, tapi kita berada di bawah langit yang sama dan dalam takdir-Nya yang terindah.",
+            "Kutitipkan perasaan ini pada Pemilik Hati yang sesungguhnya, karena Dia-lah penulis skenario terbaik.",
+            "Rasa ini datang dari-Nya, dan kepada-Nya pula aku berserah. Semoga Dia meridai setiap detik penantian ini."
+        ];
+
+        // --- SCRIPT UTAMA ---
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const mainContent = document.getElementById('main-content');
+        const startButton = document.getElementById('start-button');
+        const nameInput = document.getElementById('name-input');
+        const greeting = document.getElementById('greeting');
+        const mainTitle = document.getElementById('main-title');
+        
+        startButton.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (name === '') { alert('Tolong masukkan nama terlebih dahulu.'); return; }
+            greeting.innerHTML = `Untukmu, <span style="font-weight:bold; font-style:italic;">${name}</span>`;
+            welcomeScreen.style.opacity = '0';
+            mainContent.style.opacity = '1';
+            mainContent.style.pointerEvents = 'auto';
+            setTimeout(() => { welcomeScreen.style.display = 'none'; }, 1500);
+
+            let currentIndex = 0;
+            function gantiKata() {
+                mainTitle.style.opacity = 0;
+                setTimeout(() => {
+                    mainTitle.innerText = kataRinduIslami[currentIndex];
+                    mainTitle.style.opacity = 1;
+                    currentIndex = (currentIndex + 1) % kataRinduIslami.length;
+                }, 700);
+            }
+            gantiKata();
+            setInterval(gantiKata, 5000);
+        });
+
+        // --- Logika Jam Real-time ---
+        const hariEl = document.getElementById('hari');
+        const tanggalEl = document.getElementById('tanggal');
+        const jamEl = document.getElementById('jam');
+        const namaHari = ["Ahad", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
+        const namaBulan = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+        function formatTime(time) { return time < 10 ? `0${time}` : time; }
+        
+        function updateRealTimeClock() {
+            const now = new Date();
+            const hari = namaHari[now.getDay()];
+            const tanggal = now.getDate();
+            const bulan = namaBulan[now.getMonth()];
+            const tahun = now.getFullYear();
+            const jam = formatTime(now.getHours());
+            const menit = formatTime(now.getMinutes());
+            const detik = formatTime(now.getSeconds());
+            hariEl.innerText = hari;
+            tanggalEl.innerText = `${tanggal} ${bulan} ${tahun}`;
+            jamEl.innerText = `${jam}:${menit}:${detik}`;
+        }
+        setInterval(updateRealTimeClock, 1000);
+        updateRealTimeClock();
+
+        // --- Konfigurasi Particles.js ---
+        particlesJS("particles-js", {
+            "particles": {"number": {"value": 80,"density": {"enable": true,"value_area": 800}},"color": {"value": "#ffffff"},"shape": {"type": "circle"},"opacity": {"value": 0.5,"random": true,"anim": {"enable": true,"speed": 1,"opacity_min": 0.1,"sync": false}},"size": {"value": 3,"random": true},"line_linked": {"enable": true,"distance": 150,"color": "#ffffff","opacity": 0.4,"width": 1},"move": {"enable": true,"speed": 2,"direction": "none","random": false,"straight": false,"out_mode": "out","bounce": false}},
+            "interactivity": {"detect_on": "canvas","events": {"onhover": {"enable": true,"mode": "grab"},"onclick": {"enable": true,"mode": "push"},"resize": true},"modes": {"grab": {"distance": 140,"line_linked": {"opacity": 1}},"push": {"particles_nb": 4}}},
+            "retina_detect": true
+        });
+    </script>
+</body>
+</html>
